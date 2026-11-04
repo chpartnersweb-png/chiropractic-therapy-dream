@@ -2,32 +2,141 @@
 import { getImage } from 'astro:assets';
 import { photos } from '../data/images';
 import { site } from '../data/site';
-const title = `${site.name}｜東大和市のカイロ・セラピーサロン`;
-const description = '東大和市駅から徒歩8分のカイロセラピードリーム。一人ひとりの身体に合わせたカイロプラクティック、深層筋ストレッチ、リンパケアなどをご案内。受付9:00〜17:00、金曜日定休。ご予約・ご相談は090-4814-4345へ。';
-const ogImage = await getImage({ src: photos.salon, width: 1200, height: 630, format: 'jpg', fit: 'cover' });
-const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
-const imageUrl = Astro.site ? new URL(ogImage.src, Astro.site).href : ogImage.src;
+import { menuGroups } from '../data/menu';
+import { seo } from '../config/seo.mjs';
+
+// このLPの正規URL。クエリ・フラグメント・プレビュー用ホストは含めません。
+const canonical = seo.siteUrl;
+const absoluteUrl = (path: string) => new URL(path, canonical).href;
+const businessId = absoluteUrl('#salon');
+const websiteId = absoluteUrl('#website');
+const webpageId = absoluteUrl('#webpage');
+const photoId = absoluteUrl('#salon-photo');
+const directorId = absoluteUrl('#practitioner');
+const [ogImage, logo, directorImage] = await Promise.all([
+  getImage({ src: photos.salon, width: 1200, height: 630, format: 'jpg', fit: 'cover' }),
+  getImage({ src: photos.symbol, width: 256, height: 256, format: 'png' }),
+  getImage({ src: photos.director, width: 398, height: 530, format: 'jpg' }),
+]);
+const imageUrl = absoluteUrl(ogImage.src);
+const prices = menuGroups.flatMap(group => group.items.map(item => item.price));
+
 const structuredData = {
-  '@context': 'https://schema.org', '@type': 'LocalBusiness', name: site.name,
-  telephone: '+81-90-4814-4345', description,
-  ...(canonical ? { url: canonical, image: imageUrl } : {}),
-  address: { '@type': 'PostalAddress', postalCode: site.postalCode, addressCountry: 'JP', addressRegion: '東京都', addressLocality: '東大和市', ...(site.streetAddress ? { streetAddress: site.streetAddress } : {}) },
-  hasMap: site.mapUrl,
-  openingHoursSpecification: { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Saturday','Sunday'], opens: '09:00', closes: '17:00' },
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': websiteId,
+      url: canonical,
+      name: site.name,
+      inLanguage: seo.language,
+      publisher: { '@id': businessId },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': webpageId,
+      url: canonical,
+      name: seo.title,
+      description: seo.description,
+      inLanguage: seo.language,
+      isPartOf: { '@id': websiteId },
+      mainEntity: { '@id': businessId },
+      primaryImageOfPage: { '@id': photoId },
+    },
+    {
+      '@type': 'ImageObject',
+      '@id': photoId,
+      url: imageUrl,
+      contentUrl: imageUrl,
+      width: 1200,
+      height: 630,
+      caption: `${site.name}の施術室`,
+    },
+    {
+      // 医療機関や資格に関する未確認の属性を付けず、事業情報を記述します。
+      '@type': 'LocalBusiness',
+      '@id': businessId,
+      name: site.name,
+      url: canonical,
+      mainEntityOfPage: { '@id': webpageId },
+      description: seo.description,
+      telephone: '+81-90-4814-4345',
+      image: { '@id': photoId },
+      logo: { '@type': 'ImageObject', url: absoluteUrl(logo.src), width: 256, height: 256 },
+      address: {
+        '@type': 'PostalAddress',
+        postalCode: site.postalCode,
+        addressCountry: 'JP',
+        addressRegion: '東京都',
+        addressLocality: '東大和市',
+        streetAddress: site.streetAddress,
+      },
+      hasMap: site.mapUrl,
+      priceRange: `${Math.min(...prices).toLocaleString('ja-JP')}円〜${Math.max(...prices).toLocaleString('ja-JP')}円`,
+      openingHoursSpecification: {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Saturday', 'Sunday'].map(day => `https://schema.org/${day}`),
+        opens: '09:00',
+        closes: '17:00',
+      },
+      employee: { '@id': directorId },
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: '施術メニュー・料金',
+        url: absoluteUrl('#menu'),
+        itemListElement: menuGroups.map(group => ({
+          '@type': 'OfferCatalog',
+          name: group.title,
+          url: absoluteUrl(`#${group.id}`),
+          itemListElement: group.items.map(item => ({
+            '@type': 'Offer',
+            name: item.name,
+            price: item.price,
+            priceCurrency: 'JPY',
+            url: absoluteUrl(`#${group.id}`),
+            offeredBy: { '@id': businessId },
+            itemOffered: {
+              '@type': 'Service',
+              name: item.name,
+              description: item.description,
+              serviceType: group.title,
+              provider: { '@id': businessId },
+            },
+          })),
+        })),
+      },
+    },
+    {
+      '@type': 'Person',
+      '@id': directorId,
+      name: site.director,
+      jobTitle: '院長',
+      url: absoluteUrl('#director'),
+      image: absoluteUrl(directorImage.src),
+      worksFor: { '@id': businessId },
+    },
+  ],
 };
 ---
-<title>{title}</title>
-<meta name="description" content={description} />
-{canonical && <link rel="canonical" href={canonical} />}
+<title>{seo.title}</title>
+<meta name="description" content={seo.description} />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<link rel="canonical" href={canonical} />
 <meta property="og:type" content="website" />
-<meta property="og:locale" content="ja_JP" />
+<meta property="og:locale" content={seo.locale} />
 <meta property="og:site_name" content={site.name} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
+<meta property="og:title" content={seo.title} />
+<meta property="og:description" content={seo.description} />
+<meta property="og:url" content={canonical} />
 <meta property="og:image" content={imageUrl} />
+<meta property="og:image:secure_url" content={imageUrl} />
+<meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="カイロセラピードリームの施術室" />
-{canonical && <meta property="og:url" content={canonical} />}
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={seo.title} />
+<meta name="twitter:description" content={seo.description} />
+<meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:image:alt" content="カイロセラピードリームの施術室" />
 <script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />
