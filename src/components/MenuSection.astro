@@ -1,0 +1,27 @@
+---
+import { Image } from 'astro:assets';
+import { menuGroups } from '../data/menu';
+import { site } from '../data/site';
+import Icon from './Icon.astro';
+---
+<section id="menu" class="treatments" aria-labelledby="menu-title">
+  <div class="treatments__intro wrap">
+    <div data-reveal><p class="eyebrow"><span></span> Treatment & Price</p><h2 id="menu-title">整える。ほぐす。<br />温める。</h2></div>
+    <div class="treatments__intro-right" data-reveal><p>身体のこと、気になること。<br />あなたに合うケアを、ここから。</p><nav class="treatment-index" aria-label="メニューの分類">{menuGroups.map(group => <a href={`#${group.id}`}><span>{group.number}</span>{group.title}<span aria-hidden="true">↓</span></a>)}</nav></div>
+  </div>
+  {menuGroups.map(group => <article id={group.id} class={`treatment-chapter treatment-chapter--${group.id}`} aria-labelledby={`${group.id}-title`}>
+    <div class="treatment-chapter__inner wrap">
+      <div class="treatment-chapter__visual">
+        <div class="chapter-label" data-reveal><span>{group.number}</span><p lang="en">{group.english}</p></div>
+        <h3 id={`${group.id}-title`} data-reveal>{group.heading.map(line => <span>{line}</span>)}</h3>
+        <p class="treatment-chapter__description" data-reveal>{group.description}</p>
+        <figure data-reveal><Image src={group.image} alt={group.imageAlt} width={group.image.width} height={group.image.height} widths={group.id === 'other' ? [320, 567] : [400, group.image.width]} sizes="(max-width: 760px) 88vw, 36vw" /><figcaption>{group.imageCaption}</figcaption></figure>
+      </div>
+      <div class="treatment-chapter__list" data-reveal>
+        <div class="price-list__heading"><h4>{group.title}</h4><span lang="en">MENU / PRICE</span></div>
+        <dl class="price-list">{group.items.map(item => <div class="price-list__item"><dt>{item.name}</dt><dd class="price-list__price"><span>{item.price.toLocaleString('ja-JP')}</span>円</dd><dd class="price-list__description">{item.description}</dd></div>)}</dl>
+      </div>
+    </div>
+  </article>)}
+  <div class="menu-consult wrap" data-reveal><div><p class="menu-consult__title">どの施術を選ぶか、迷われたら。</p><p>気になるお悩みを、お電話でお聞かせください。</p></div><a class="text-link" href={site.phoneHref}>電話で相談する<Icon /></a></div>
+</section>

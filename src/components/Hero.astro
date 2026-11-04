@@ -1,0 +1,15 @@
+---
+import { Image } from 'astro:assets';
+import { photos } from '../data/images';
+import Icon from './Icon.astro';
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__visual"><Image src={photos.hero} alt="肩と背中にやさしく手を添える施術のイメージ" width={1536} height={1024} widths={[640, 960, 1280, 1536]} sizes="100vw" loading="eager" fetchpriority="high" quality={85} /></div>
+  <div class="hero__shade"></div>
+  <div class="hero__copy">
+    <p class="hero__eyebrow">東大和市のカイロ・セラピーサロン</p>
+    <h1 id="hero-title"><span>一人ひとりの身体に合わせた、</span><span>あなただけの施術。</span></h1>
+    <p class="hero__signature" lang="en">A little care. A better balance.</p>
+  </div>
+  <div class="hero__bottom"><span class="hero__location" lang="en">HIGASHIYAMATO, TOKYO</span><a class="hero__scroll" href="#about"><span>ドリームについて</span><span class="hero__scroll-line"></span></a><a class="hero__menu" href="#menu">施術・料金を見る <Icon /></a></div>
+</section>

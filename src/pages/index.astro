@@ -1,16 +1,33 @@
 ---
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import BodyBalance from '../components/BodyBalance.astro';
+import MenuSection from '../components/MenuSection.astro';
+import Director from '../components/Director.astro';
+import SalonGallery from '../components/SalonGallery.astro';
+import Access from '../components/Access.astro';
+import Contact from '../components/Contact.astro';
+import Seo from '../components/Seo.astro';
+import '../styles/global.css';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#4a342b" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Sans+JP:wght@400;500;600&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet" />
+    <Seo />
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main-content">本文へ移動</a>
+    <Header />
+    <main id="main-content"><Hero /><BodyBalance /><MenuSection /><Director /><SalonGallery /><Access /></main>
+    <Contact />
+    <script>import '../scripts/motion';</script>
+  </body>
 </html>

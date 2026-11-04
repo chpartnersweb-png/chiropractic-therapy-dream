@@ -1,0 +1,33 @@
+---
+import { getImage } from 'astro:assets';
+import { photos } from '../data/images';
+import { site } from '../data/site';
+const title = `${site.name}｜東大和市のカイロ・セラピーサロン`;
+const description = '東大和市駅から徒歩8分のカイロセラピードリーム。一人ひとりの身体に合わせたカイロプラクティック、深層筋ストレッチ、リンパケアなどをご案内。受付9:00〜17:00、金曜日定休。ご予約・ご相談は090-4814-4345へ。';
+const ogImage = await getImage({ src: photos.salon, width: 1200, height: 630, format: 'jpg', fit: 'cover' });
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const imageUrl = Astro.site ? new URL(ogImage.src, Astro.site).href : ogImage.src;
+const structuredData = {
+  '@context': 'https://schema.org', '@type': 'LocalBusiness', name: site.name,
+  telephone: '+81-90-4814-4345', description,
+  ...(canonical ? { url: canonical, image: imageUrl } : {}),
+  address: { '@type': 'PostalAddress', postalCode: site.postalCode, addressCountry: 'JP', addressRegion: '東京都', addressLocality: '東大和市', ...(site.streetAddress ? { streetAddress: site.streetAddress } : {}) },
+  hasMap: site.mapUrl,
+  openingHoursSpecification: { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Saturday','Sunday'], opens: '09:00', closes: '17:00' },
+};
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+{canonical && <link rel="canonical" href={canonical} />}
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="ja_JP" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="カイロセラピードリームの施術室" />
+{canonical && <meta property="og:url" content={canonical} />}
+<meta name="twitter:card" content="summary_large_image" />
+<script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />

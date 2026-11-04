@@ -1,0 +1,10 @@
+---
+import { Image } from 'astro:assets';
+import { photos } from '../data/images';
+import { site } from '../data/site';
+import Icon from './Icon.astro';
+---
+<section id="access" class="access section-space" aria-labelledby="access-title">
+  <div class="access__inner wrap"><div class="access__info"><p class="eyebrow" data-reveal><span></span> Access & Information</p><h2 id="access-title" data-reveal>ドリームへの<br />ご案内。</h2><p class="access__station" data-reveal><Icon name="pin" />{site.access}</p><dl class="access__details" data-reveal><div><dt>サロン名</dt><dd>{site.name}</dd></div><div><dt>所在地</dt><dd>〒{site.postalCode}<br />{site.area}{site.streetAddress && <><br />{site.streetAddress}</>}<a class="access__map-link" href={site.mapUrl} target="_blank" rel="noopener noreferrer">詳しい場所をGoogleマップで見る<Icon /></a></dd></div><div><dt>受付時間</dt><dd>{site.hours}<small>平日・土日祝ともに同じ時間です。</small></dd></div><div><dt>定休日</dt><dd>{site.closed}</dd></div><div><dt>電話番号</dt><dd><a class="access__phone" href={site.phoneHref}>{site.phone}</a></dd></div></dl></div><figure class="access__exterior" data-reveal><div><Image src={photos.exterior} alt="カイロセラピードリームの入口。茶色いひさしが目印です" width={900} height={900} fit="cover" position="bottom" widths={[480,720,900]} sizes="(max-width: 760px) 90vw, 42vw" /></div><figcaption><span lang="en">WELCOME TO DREAM</span><span>こちらの入口からお入りください。</span></figcaption></figure></div>
+  <div class="access__map wrap" data-reveal><iframe src={site.mapEmbed} title="カイロセラピードリーム周辺のGoogleマップ" width="1200" height="400" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe><a href={site.mapUrl} target="_blank" rel="noopener noreferrer">Googleマップで開く<Icon /></a></div>
+</section>

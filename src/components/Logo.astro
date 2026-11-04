@@ -1,0 +1,11 @@
+---
+import { Image } from 'astro:assets';
+import { photos } from '../data/images';
+import { site } from '../data/site';
+interface Props { footer?: boolean; }
+const { footer = false } = Astro.props;
+---
+<a href="#top" class:list={['brand', { 'brand--footer': footer }]} aria-label={`${site.name} ホームへ`}>
+  <Image class="brand__symbol" src={photos.symbol} alt="" width={64} height={64} widths={[64, 128]} sizes="64px" />
+  <span class="brand__type"><span class="brand__name">カイロセラピー<span>ドリーム</span></span><span class="brand__english" lang="en">CHIROPRACTIC & THERAPY</span></span>
+</a>

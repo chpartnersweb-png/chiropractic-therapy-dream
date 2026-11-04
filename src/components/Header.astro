@@ -1,0 +1,21 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { navigation, site } from '../data/site';
+---
+<header class="site-header" data-header>
+  <Logo />
+  <nav class="desktop-nav" aria-label="メインナビゲーション">
+    {navigation.map(item => <a href={item.href}>{item.label}</a>)}
+  </nav>
+  <a class="header-contact" href={site.phoneHref}><Icon name="phone" /><span>ご予約・ご相談<small>{site.phone}</small></span></a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-navigation" aria-label="メニューを開く" data-nav-toggle hidden><span></span><span></span><small>MENU</small></button>
+</header>
+<dialog id="mobile-navigation" class="mobile-navigation" aria-label="ナビゲーション" data-nav-dialog>
+  <div class="mobile-navigation__top"><Logo /><button class="nav-close" type="button" aria-label="メニューを閉じる" data-nav-close><span></span><span></span></button></div>
+  <nav aria-label="モバイルナビゲーション">
+    {navigation.map((item, i) => <a href={item.href}><span class="mobile-navigation__number">0{i + 1}</span><span>{item.label}<small lang="en">{item.en}</small></span><Icon /></a>)}
+  </nav>
+  <a class="mobile-navigation__phone" href={site.phoneHref}><Icon name="phone" />{site.phone}</a>
+  <p>受付 {site.hours} ／ 金曜日定休</p>
+</dialog>

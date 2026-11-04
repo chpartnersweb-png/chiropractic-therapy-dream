@@ -1,0 +1,8 @@
+---
+import { site, navigation } from '../data/site';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+---
+<section id="contact" class="contact" aria-labelledby="contact-title"><div class="contact__inner wrap"><p class="eyebrow" data-reveal><span></span> Reservation & Contact</p><h2 id="contact-title" data-reveal>お身体のこと、<br />まずはお聞かせください。</h2><p class="contact__lead" data-reveal>ご予約・ご相談は、お電話で承ります。</p><a class="contact__phone" href={site.phoneHref} data-reveal><Icon name="phone" /><span>{site.phone}</span><span class="contact__arrow"><Icon /></span></a><p class="contact__hours" data-reveal>受付 {site.hours}<span>／</span>金曜日定休</p></div><span class="contact__decoration" aria-hidden="true">Dream</span></section>
+<footer class="site-footer"><div class="site-footer__top wrap"><Logo footer /><nav aria-label="フッターナビゲーション">{navigation.map(item => <a href={item.href}>{item.label}</a>)}</nav><a class="back-top" href="#top" aria-label="ページの先頭へ"><Icon /></a></div><div class="site-footer__bottom wrap"><p>{site.area} ／ {site.access}</p><small lang="en">© {new Date().getFullYear()} Chiropractic Therapy Dream</small></div></footer>
+<div class="mobile-contact"><a href="#menu" class="mobile-contact__menu"><span lang="en">TREATMENT</span>施術・料金</a><a href={site.phoneHref} class="mobile-contact__call"><Icon name="phone" /><span>電話で予約・相談<small>9:00–17:00 ／ 金曜定休</small></span><Icon /></a></div>

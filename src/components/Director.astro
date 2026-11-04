@@ -1,0 +1,12 @@
+---
+import { Image } from 'astro:assets';
+import { photos } from '../data/images';
+import { site } from '../data/site';
+---
+<section id="director" class="director section-space" aria-labelledby="director-title">
+  <div class="director__background-word" aria-hidden="true">With you.</div>
+  <div class="director__inner wrap">
+    <div class="director__portrait" data-reveal><span class="director__photo-label" lang="en">MEET YOUR THERAPIST</span><figure><Image src={photos.director} alt="院長 岩本八重子" width={398} height={530} widths={[300,398]} sizes="(max-width: 760px) 72vw, 350px" /></figure><div class="director__name"><span>院長</span><p>{site.director}</p><span lang="en">Yaeko Iwamoto</span></div></div>
+    <div class="director__content"><p class="eyebrow" data-reveal><span></span> Director</p><h2 id="director-title" data-reveal>私自身の経験から、<br />あなたの身体に<br class="desktop-break" />寄り添いたい。</h2><div class="director__bio" data-reveal><p>自身の腰痛をきっかけに、カイロ・整体の道へ。身体に向き合う学びを重ね、2013年に現在の場所でカイロセラピードリームを開業しました。</p><p>アメリカ・テキサスカイロプラクティック大学への短期留学で、カイロプラクティック技術や解剖学を学びました。フランス・ニースのエレガンスゴンタールスクールでは、フランス式のリンパドレナージュを修得しています。</p></div><ol class="director__history" data-reveal><li><span>きっかけ</span><p>自身の腰痛から、カイロ・整体の道へ。</p></li><li><span>海外での学び</span><p>アメリカで技術・解剖学を、<br />フランスでリンパドレナージュを学ぶ。</p></li><li><span>2013</span><p>現在の場所でサロンを開業。</p></li></ol></div>
+  </div>
+</section>

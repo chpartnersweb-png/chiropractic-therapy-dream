@@ -1,0 +1,5 @@
+---
+import { Image } from 'astro:assets';
+import { photos } from '../data/images';
+---
+<section class="salon" aria-labelledby="salon-title"><div class="salon__heading wrap"><p class="eyebrow" data-reveal><span></span> A moment for yourself</p><h2 id="salon-title" data-reveal>自分をいたわる、<br />ひとときを。</h2><p data-reveal>日々の忙しさから少し離れて。<br />身体に目を向ける時間を、ドリームで。</p></div><figure class="salon__photo" data-reveal><div class="salon__image-window"><Image data-parallax src={photos.salon} alt="カイロセラピードリームの施術室" width={1600} height={1200} widths={[640,960,1280,1600]} sizes="100vw" /></div><figcaption><span lang="en">OUR SALON</span><span>カイロセラピードリーム 施術室</span></figcaption></figure></section>
